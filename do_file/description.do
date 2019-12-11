@@ -13,120 +13,10 @@ use "$datadir/2016ji student dataset.dta",clear
 
 keep if regexm(学号, "^[4][1][6][0-2][0-9][0-9][0-9][0-9]$" ) == 1 & stu_b_16_stuid != "" & stu_b_16_stuname != ""
 rename 学号 stuid
-，
 
-***********数据处理******************
-*是否免费师范生
-tab stu_b_16_47,m
-*专业
-tab stu_b_16_stumajor,m
-*出生年份
-tab stu_b_16_1,m
-tab stu_b_16_1,m
-*性别
-tab stu_b_16_3,m
-tab stu_b_16_3,m
-*民族
-tab stu_b_16_4,m
-tab stu_b_16_4a,m
-*户籍 （5个没有户口）
-tab stu_b_16_5,m
-tab stu_b_16_5,m
-*是否来自城市
-tab stu_b_16_26,m
-tab stu_b_16_26a,m
-*父亲文化程度 （48个不知道，111个没填）
-tab stu_b_16_19_101,m
-*母亲文化程度
-tab stu_b_16_19_102,m
-*父亲职业 （353个其他）
-tab stu_b_16_21_101,m
-*母亲职业 （345个其他）
-tab stu_b_16_21_102,m
-*是否独生子女3456
-tab stu_b_16_11_103,m
-*是否能上网
-tab stu_b_16_27,m
-tab stu_b_16_27,m
-*冰箱
-tab stu_b_16_28a,m
-tab stu_b_16_28a,m
-*微波炉
-tab stu_b_16_28b,m
-*电脑
-tab stu_b_16_28c,m
-*空调
-tab stu_b_16_28d,m
-*小汽车
-tab stu_b_16_28e,m
-*洗衣机
-tab stu_b_16_28f,m
-*洗碗机
-tab stu_b_16_28g,m
-*吸尘器
-tab stu_b_16_28h,m
-tab stu_b_16_28h,m
-*是否第一志愿
-tab stu_b_16_43,m
+*zhiyuan
 replace stu_b_16_43=0 if stu_b_16_43==2
 rename stu_b_16_43 zhiyuan
-
-**SCL-90抑郁分量表
-*5	对异性的兴趣减退
-tab stu_b_16_5_3,m
-tab stu_b_16_5_3,m	
-*14	感到自己的精力下降，活动减慢
-tab stu_b_16_14_3,m
-*15	想结束自己的生命
-tab stu_b_16_15_3,m
-*20	容易哭泣
-tab stu_b_16_20_3,m
-*22	感到受骗，中了圈套或有人想抓住您
-tab stu_b_16_22_3,m
-tab stu_b_16_22_3,m
-*26	经常责怪自己
-tab stu_b_16_26_3,m
-*29	感到孤独
-tab stu_b_16_29_3,m
-*30	感到苦闷
-tab stu_b_16_30_3,m
-*31	过分担忧
-tab stu_b_16_31_3,m
-tab stu_b_16_31_3,m
-*32	对事物不感兴趣
-tab stu_b_16_32_3,m
-*54	感到前途没有希望
-tab stu_b_16_54_3,m
-*71	感到任何事情都很困难
-tab stu_b_16_71_3,m
-tab stu_b_16_71_3,m
-*79	感到自己没有什么价值
-tab stu_b_16_79_3,m
-
-//drop
-drop if stu_b_16_1 == ".o" //drop1个
-drop if stu_b_16_3 == . //drop9个
-drop if stu_b_16_5 == 3
-
-drop if stu_b_16_19_101 == . & stu_b_16_19_102 == . //drop11个
-drop if stu_b_16_19_101 == . & stu_b_16_19_102 == .n //drop0个
-drop if stu_b_16_19_101 == . & stu_b_16_19_102 == 16 //drop0个
-drop if stu_b_16_19_101 == 16 & stu_b_16_19_102 == . //drop1个
-drop if stu_b_16_19_101 == 16 & stu_b_16_19_102 == .n //drop0个
-drop if stu_b_16_19_101 == 16 & stu_b_16_19_102 == 16 //drop29个
-
-drop if stu_b_16_21_101 == . & stu_b_16_21_102 == . //drop0个
-
-drop if stu_b_16_27 == . //drop11个
-drop if stu_b_16_28a == . //drop1个
-
-drop if stu_b_16_28h == . //drop2个
-
-drop if stu_b_16_5_3 == . //drop1个
-drop if stu_b_16_22_3 == . //drop2个
-drop if stu_b_16_31_3 == . //drop3个
-drop if stu_b_16_71_3 == . //drop1个
-
 
 *************生成自变量*****************
 *是否免费师范生 fnormalstu
@@ -145,11 +35,6 @@ egen depressed = rowtotal(stu_b_16_5_3 stu_b_16_14_3 stu_b_16_15_3 stu_b_16_20_3
 egen mdepressed = rowmean(stu_b_16_5_3 stu_b_16_14_3 stu_b_16_15_3 stu_b_16_20_3 stu_b_16_22_3 stu_b_16_26_3 stu_b_16_29_3 stu_b_16_30_3 stu_b_16_31_3 stu_b_16_32_3 stu_b_16_54_3 stu_b_16_71_3 stu_b_16_79_3)
 //depressed>26, mdepressed>2检出抑郁
 
-**标准化期末英语成绩 sd_term_exam_总评成绩 
-egen sd_term_exam_总评成绩 = std(term_exam_总评成绩)
-
-
-*************生成控制变量**************
 **专业  major
 *0理工学，1社会科学
 tab stu_b_16_stumajor,m
@@ -165,15 +50,15 @@ tab major,m
 tab stu_b_16_1,m
 destring stu_b_16_1,replace
 gen age = 2016 - stu_b_16_1
-tab age,m 
-drop if age == 15 | age == 23 | age == 25 | age == 26 | age == 27
+tab age,m
+*drop if age == 15 | age == 23 | age == 25 | age == 26 | age == 27
 tab age,m 
 //年龄分层(age1)
 gen age1=.
 	replace age1=1 if age <= 17
 	replace age1=2 if age == 18
-	replace age1=1 if age == 19
-	replace age1=2 if age >= 20
+	replace age1=3 if age == 19
+	replace age1=4 if age >= 20
 	
 //将年龄分为18岁以上=1和18岁及以下=0（age2）
 gen age2 = .
@@ -283,7 +168,7 @@ gen parentcareer = facareer
 tab parentcareer,m
 replace parentcareer = mocareer if facareer == .
 tab parentcareer,m
-drop if parentcareer == .
+*drop if parentcareer == .
 replace parentcareer = mocareer if mocareer > facareer & mocareer != .
 tab parentcareer,m
 egen sd_parentcareer = std(parentcareer)
@@ -360,49 +245,56 @@ rename norm_r2 prefer
 **标准化高考英语成绩 sd_gk_engscore
 rename stu_b_16_35a gk_engscore
 egen sd_gk_engscore = std(gk_engscore)
-
+，
 ************描述性表格******************
-*专业
+count
+count if mdepressed > 2
+*专业 理工科和社会科学类
+codebook major
 count if mdepressed > 2 & major == 1
 count if mdepressed > 2 & major == 0
 *年龄
+codebook age1
 count if mdepressed > 2 & age <= 17
 count if mdepressed > 2 & age ==18
 count if mdepressed > 2 & age ==19
 count if mdepressed > 2 & age >=20
-*年龄分两段
-count if mdepressed > 2 & age2 == 0
-count if mdepressed > 2 & age2 == 1
 *性别
+codebook gender
 count if mdepressed > 2 & gender == 0
 count if mdepressed > 2 & gender == 1
 *民族
+codebook nation
 count if mdepressed > 2 & nation == 1
 count if mdepressed > 2 & nation == 0
 *户籍
+codebook hukou
 count if mdepressed > 2 & hukou == 1
 count if mdepressed > 2 & hukou == 0
 *是否独生子女
+codebook onlychild
 count if mdepressed > 2 & onlychild == 1
 count if mdepressed > 2 & onlychild == 0
 *家庭社会经济地位
-count if mdepressed > 2 & SES3 == 1
-count if mdepressed > 2 & SES3 == 0
+codebook SES2
+count if mdepressed > 2 & SES2 == 1
+count if mdepressed > 2 & SES2 == 0
 *毕业高中类型 stu_b_16_30
+codebook stu_b_16_30
 count if mdepressed >2 & stu_b_16_30==1
 count if mdepressed >2 & stu_b_16_30==2
 count if mdepressed >2 & stu_b_16_30==3
 count if mdepressed >2 & stu_b_16_30==4
-*理工科/社会科学类
-count if mdepressed >2 & major ==1
-count if mdepressed >2 & major ==0
 *是否免费师范生
+codebook fnormalstu
 count if mdepressed > 2 & fnormalstu == 1
 count if mdepressed > 2 & fnormalstu == 0
 *自我主导型/非自我主导型公费师范生
+codebook stu_selfmotiv
 count if mdepressed > 2 & stu_selfmotiv == 1
 count if mdepressed > 2 & stu_selfmotiv == 0 //important!
 *第一志愿专业
+codebook zhiyuan
 count if mdepressed > 2 & zhiyuan == 1
 count if mdepressed > 2 & zhiyuan == 0
 
@@ -417,7 +309,7 @@ reg hukou depressed
 	test depressed  //方差分析
 reg onlychild depressed
 	test depressed  //方差分析
-reg SES3 depressed
+reg SES2 depressed
 	test depressed  //方差分析
 reg stu_b_16_30 depressed
 	test depressed  //方差分析
@@ -429,55 +321,3 @@ reg stu_selfmotiv depressed
 	test depressed  //方差分析
 reg zhiyuan depressed
 	test depressed  //方差分析
-
-*************回归******************
-
-//是否公费师范生对抑郁的影响
-xi:reg depressed fnormalstu
-   est store m1
-xi:reg depressed fnormalstu major zhiyuan age gender nation onlychild hukou SES3
-   est store m2  
-outreg2 [m1 m2] using "reg.xls", excel replace bdec(3) sdec(3)
-
-//是否公费师范生对英语成绩的影响
-xi:reg sd_term_exam_总评成绩 fnormalstu
-   est store w1
-xi:reg sd_term_exam_总评成绩 fnormalstu  sd_gk_engscore  age gender nation  hukou sd_parenteduyear SES3
-   est store w2  
-outreg2 [w1 w2] using "reg2.xls", excel replace bdec(3) sdec(3)
-
-//自我主导/非自我主导公费师范生对抑郁回归
-*keep fnormalstu==1
-xi:reg depressed stu_selfmotiv
-   est store n1
-xi:reg depressed stu_selfmotiv major zhiyuan age gender nation onlychild hukou SES3
-   est store n2 
-outreg2 [n1 n2]using reg3.xls, excel replace bdec(2) sdec(2)
-
-//教师职业认同对抑郁回归
-xi:reg depressed sd_stu_profession_score
-   est store n1
-xi:reg depressed sd_stu_profession_score major zhiyuan age gender nation onlychild hukou SES3
-   est store n2 
-outreg2 [n1 n2]using reg4.xls, excel replace bdec(2) sdec(2)
-
-//自我主导/非自我主导公费师范生对英语成绩回归
-*keep if fnormalstu==1
-xi:reg sd_term_exam_总评成绩 stu_selfmotiv
-   est store k1
-xi:reg sd_term_exam_总评成绩 stu_selfmotiv sd_gk_engscore major zhiyuan age gender nation onlychild hukou SES3
-   est store k2 
-xi:reg sd_term_exam_总评成绩 stu_selfmotiv sd_gk_engscore major zhiyuan age gender nation onlychild hukou SES3 prefer
-   est store k3
-outreg2 [k1 k2 k3] using reg5.xls, excel replace bdec(2) sdec(2)
-
-//非公费师范生中所学专业是否是第一志愿专业对抑郁回归
-*keep if fnormalstu==0
-xi:reg depressed zhiyuan
-   est store k1
-xi:reg depressed zhiyuan major age gender nation onlychild hukou SES3
-   est store k2 
-outreg2 [k1 k2]using reg6.xls, excel replace bdec(2) sdec(2)
-
-
-
