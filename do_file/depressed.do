@@ -9,6 +9,7 @@ capture log close
 	global savedir "C:\Users\wangh\Desktop\师范生报告\第六章抑郁数据处理\save"
 	cd "$savedir"
 
+*修改
 use "$datadir/2016ji student dataset.dta",clear
 
 keep if regexm(学号, "^[4][1][6][0-2][0-9][0-9][0-9][0-9]$" ) == 1 & stu_b_16_stuid != "" & stu_b_16_stuname != ""
