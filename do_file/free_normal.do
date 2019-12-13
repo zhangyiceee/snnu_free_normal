@@ -2,8 +2,8 @@
 **       		  免费师范生项目  
 **Goal		:    免费师范生的教师职业选择的影响因素
 **Data		:    2016ji_student_dataset.dta
-**Author	:  	 ZhangYi zhangyiceee@163.com 15592606739
-**Created	:  	 20191011  
+**Author	:  	 ZhangYi 
+**Created	:  	 20191213 
 **Last Modified: 2019
 *============================================================*
 	capture	clear
@@ -11,10 +11,13 @@
 	set	more off
 	set scrollbufsize 2048000
 	capture log close 
-	cd "/Users/zhangyi/Documents/免费师范生/raw_datasets"
-	global cleandir "/Users/zhangyi/Documents/免费师范生/clean_datasets"
-	global outdir "/Users/zhangyi/Documents/免费师范生/output"
-	global date "1201" //每次检查时修改日期，生成新的结果
+
+*张毅	
+	cd "/Users/zhangyi/Documents/数据集/free_normal/raw_data"
+	global cleandir "/Users/zhangyi/Documents/数据集/free_normal/clean_data"
+	global outdir "/Users/zhangyi/Documents/数据集/free_normal"
+	global date "1213" //每次检查时修改日期，生成新的结果
+
 *调用数据
 
 	use "2016ji_student_dataset.dta",clear
@@ -778,17 +781,6 @@
 	la values stu_major stu_major
 	tab stu_major,m
 
-***描述性统计分析
-*Prepare for var
-	*起薪：唐师兄好想没用到
-	tab stu_b_16_65 , m 
-	replace stu_b_16_65="." if stu_b_16_65=="2000~3000"
-	destring stu_b_16_65 , replace
-	*drop if stu_b_16_65 > 50000 //现不删除，因为没用到这个变量
-
-	*解释变量，需要删掉缺失值的样本
-	*stu_female stu_age stu_ethnic rural_hukou only_child SES_qt key_point stu_major 
-
 ****Prepare Y variables
 	*教师职业认同感总分
 	egen stu_profession_score = rowtotal(stu_b_16_1_2 - stu_b_16_52_2)
@@ -825,15 +817,15 @@
 	global yvar  stu_profession_score self_perception intrinsic_career_value fallback_career stu_utility_value social_utility_value task_demand task_return
 	global xvar stu_female stu_age stu_ethnic rural_hukou only_child zhongdiangaozhong SES
 	
-
-	*删除变量中存在缺失值的样本
+	/*删除变量中存在缺失值的样本 后期可能会用到，先不删
 	foreach var of varlist stu_profession_score self_perception ///
 			intrinsic_career_value fallback_career stu_utility_value ///
 			social_utility_value task_demand task_return ///
 			stu_female stu_age stu_ethnic rural_hukou only_child zhongdiangaozhong SES {
 		drop if `var'==.
 	}
-*自我主导和非自我主导型免费师范生
+*/
+	*自我主导和非自我主导型免费师范生
 	gen  stu_selfmotiv=2-stu_b_16_52 //1=自我主导的报考生 0=非自我主导的报考生
 	bro  stu_selfmotiv stu_b_16_52 
 	label var stu_selfmotiv "自我主导=1 非自我主导=0"
