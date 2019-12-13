@@ -1,5 +1,5 @@
 *============================================================*
-**       		  免费师范生项目  
+**       		 免费师范生项目  
 **Goal		:    免费师范生的教师职业选择的影响因素
 **Data		:    2016ji_student_dataset.dta
 **Author	:  	 ZhangYi 
@@ -15,12 +15,12 @@
 *张毅	
 	cd "/Users/zhangyi/Documents/数据集/free_normal/raw_data"
 	global cleandir "/Users/zhangyi/Documents/数据集/free_normal/clean_data"
-	global outdir "/Users/zhangyi/Documents/数据集/free_normal"
+	global outdir "/Users/zhangyi/Documents/数据集/free_normal/outdir"
 	global date "1213" //每次检查时修改日期，生成新的结果、
 *王欢
-	cd "/Users/zhangyi/Documents/数据集/free_normal/raw_data"
-	global cleandir "/Users/zhangyi/Documents/数据集/free_normal/clean_data"
-	global outdir "/Users/zhangyi/Documents/数据集/free_normal"
+	cd "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\rawdata"
+	global cleandir "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\save"
+	global outdir "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\working"
 	global date "1213" //每次检查时修改日期，生成新的结果、
 
 *调用数据
@@ -34,13 +34,23 @@
 	keep if regexm(学号, "^[4][1][6][0-2][0-9][0-9][0-9][0-9]$" ) == 1 & stu_b_16_stuid != "" & stu_b_16_stuname != ""
 	rename 学号 stuid
 
-***是否为免费师范生
+*==========*
+*自变量*
+*==========*	
+	
+***是否为免费师范生 stu_normal
 	codebook  stu_b_16_47 //免费师范生==1 非免费师范生==2 非师范生==3
 	gen 	  stu_normal = stu_b_16_47
 	label define normal 1"免费师范生"2"非免费师范生"3"非师范生"
 	label values stu_normal normal
 	tab stu_normal,m  //免费师范生1978个；非师范生2289个
+	
+***自我主导和非自我主导型免费师范生——stu_major
+	gen  stu_selfmotiv=2-stu_b_16_52 //1=自我主导的报考生 0=非自我主导的报考生
+	bro  stu_selfmotiv stu_b_16_52 
+	label var stu_selfmotiv "自我主导=1 非自我主导=0"
 
+	
 *==========*
 *个人基本情况*
 *==========*
@@ -744,7 +754,7 @@
 	replace stu_b_16_30 = 2 if stu_b_16_30a == "静海区第一中学"
 	replace stu_b_16_30 = 1 if stu_b_16_30a == "首都师范大学附属桂林实验中学"
 	list stu_b_16_stuid if stu_b_16_30a == "马苏市第一中学"
-	replace stu_b_16_30a = "乌苏市第一中学" if stu_b_16_30a == "马苏市第一中学"& stu_b_16_stuid == "111401162"
+	replace stu_b_16_30a = "乌苏市第一中学" if stu_b_16_30a == "马苏市第一中学" & stu_b_16_stuid == "111401162"
 	replace stu_b_16_30 = 2 if stu_b_16_30a == "乌苏市第一中学"
 	replace stu_b_16_30 = 1 if stu_b_16_30a == "马鞍山第二十二中学"
 	replace stu_b_16_30 = 1 if stu_b_16_30a == "驻马店高级中学"
@@ -776,7 +786,7 @@
 	gen stu_major = .
 	replace stu_major = 1 if regexm(stu_b_16_stumajor,"化学") == 1 | regexm(stu_b_16_stumajor,"地理科学") == 1 | regexm(stu_b_16_stumajor,"数学") == 1 | regexm(stu_b_16_stumajor,"物理") == 1  ///
 	| regexm(stu_b_16_stumajor,"生物科学") == 1 
-	replace stu_major = 2 if regexm(stu_b_16_stumajor,"计算机") == 1 | stu_b_16_stumajor == "食品科学与工程类" 
+	replace stu_major = 2 if regexm (stu_b_16_stumajor,"计算机") == 1 | stu_b_16_stumajor == "食品科学与工程类" 
 	replace stu_major = 3 if stu_b_16_stumajor == "中国语言文学" | regexm(stu_b_16_stumajor,"语") == 1 | regexm(stu_b_16_stumajor,"历史") == 1 | stu_b_16_stumajor == "哲学" | stu_b_16_stumajor == "外国语言文学类"  ///
 	 | stu_b_16_stumajor == "广播电视编导" | stu_b_16_stumajor == "播音与主持艺术" | stu_b_16_stumajor == "新闻传播学类"  | regexm(stu_b_16_stumajor,"美术") == 1 | regexm(stu_b_16_stumajor,"舞蹈") == 1 | regexm(stu_b_16_stumajor,"音乐") == 1
 	replace stu_major = 4 if stu_b_16_stumajor == "体育教育" | regexm(stu_b_16_stumajor,"公共事业管理") == 1 | stu_b_16_stumajor == "学前教育" | stu_b_16_stumajor == "工商管理类" ///
@@ -786,8 +796,18 @@
 	la values stu_major stu_major
 	tab stu_major,m
 
-****Prepare Y variables
-	*教师职业认同感总分
+*==========*
+*因变量*
+*==========*	
+
+****标准化期末英语成绩 sd_term_exam_总评成绩 
+egen sd_term_exam_总评成绩 = std(term_exam_总评成绩)
+
+****标准化高考英语成绩 sd_gk_engscore
+rename stu_b_16_35a gk_engscore
+egen sd_gk_engscore = std(gk_engscore)
+	
+****教师职业选择总分
 	egen stu_profession_score = rowtotal(stu_b_16_1_2 - stu_b_16_52_2)
 	label var stu_profession_score "教师职业选择总分"
 
@@ -819,6 +839,37 @@
 	egen task_return = rowtotal(stu_b_16_34_2 stu_b_16_35_2 stu_b_16_36_2 stu_b_16_37_2 stu_b_16_38_2 stu_b_16_39_2 stu_b_16_40_2 stu_b_16_41_2 stu_b_16_42_2 stu_b_16_43_2 stu_b_16_44_2 stu_b_16_45_2 stu_b_16_46_2)
 	label var task_return "任务回报"
 
+****SCL-90得分  m>2为检出心理状况
+egen mdepression = rowmean(stu_b_16_5_3 stu_b_16_14_3 stu_b_16_15_3 stu_b_16_20_3 stu_b_16_22_3 stu_b_16_26_3 stu_b_16_29_3 stu_b_16_30_3 stu_b_16_31_3 stu_b_16_32_3 stu_b_16_54_3 stu_b_16_71_3 stu_b_16_79_3)
+//抑郁
+
+egen mqutihua = rowmean(stu_b_16_1_3 stu_b_16_4_3 stu_b_16_12_3 stu_b_16_27_3 stu_b_16_40_3 stu_b_16_42_3 stu_b_16_48_3 stu_b_16_49_3 stu_b_16_52_3 stu_b_16_53_3 stu_b_16_56_3 stu_b_16_58_3)
+//躯体化
+
+egen mqiangpo = rowmean(stu_b_16_3_3 stu_b_16_9_3 stu_b_16_10_3 stu_b_16_28_3 stu_b_16_38_3 stu_b_16_45_3 stu_b_16_46_3 stu_b_16_51_3 stu_b_16_55_3 stu_b_16_65_3)
+//强迫症状
+
+egen msensitivity = rowmean(stu_b_16_6_3 stu_b_16_21_3 stu_b_16_34_3 stu_b_16_36_3 stu_b_16_37_3 stu_b_16_41_3 stu_b_16_61_3 stu_b_16_69_3 stu_b_16_73_3)
+//人际关系敏感
+	
+egen manxiety = rowmean(stu_b_16_2_3 stu_b_16_17_3 stu_b_16_23_3 stu_b_16_33_3 stu_b_16_39_3 stu_b_16_57_3 stu_b_16_72_3 stu_b_16_78_3 stu_b_16_80_3 stu_b_16_86_3)
+//焦虑
+	
+egen mdidui = rowmean(stu_b_16_11_3 stu_b_16_24_3 stu_b_16_63_3 stu_b_16_67_3 stu_b_16_74_3 stu_b_16_81_3)
+//敌对
+
+egen mkongbu = rowmean(stu_b_16_13_3 stu_b_16_25_3 stu_b_16_47_3 stu_b_16_50_3 stu_b_16_70_3 stu_b_16_75_3 stu_b_16_82_3)
+//恐怖
+
+egen mpianzhi = rowmean(stu_b_16_8_3 stu_b_16_18_3 stu_b_16_43_3 stu_b_16_68_3 stu_b_16_76_3 stu_b_16_83_3) 
+//偏执
+	
+egen mjingshenbing = rowmean(stu_b_16_7_3 stu_b_16_16_3 stu_b_16_35_3 stu_b_16_62_3 stu_b_16_77_3 stu_b_16_84_3 stu_b_16_85_3 stu_b_16_87_3 stu_b_16_88_3 stu_b_16_90_3)
+//精神病性
+	
+	
+
+	
 	global yvar  stu_profession_score self_perception intrinsic_career_value fallback_career stu_utility_value social_utility_value task_demand task_return
 	global xvar stu_female stu_age stu_ethnic rural_hukou only_child zhongdiangaozhong SES
 	
@@ -830,11 +881,9 @@
 		drop if `var'==.
 	}
 */
-	*自我主导和非自我主导型免费师范生
-	gen  stu_selfmotiv=2-stu_b_16_52 //1=自我主导的报考生 0=非自我主导的报考生
-	bro  stu_selfmotiv stu_b_16_52 
-	label var stu_selfmotiv "自我主导=1 非自我主导=0"
-	save "$cleandir/free_normal_clean_$date.dta",replace 
+
+
+save "$cleandir/free_normal_clean_$date.dta",replace 
 
 
 
