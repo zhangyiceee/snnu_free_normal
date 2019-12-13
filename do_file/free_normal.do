@@ -16,7 +16,12 @@
 	cd "/Users/zhangyi/Documents/数据集/free_normal/raw_data"
 	global cleandir "/Users/zhangyi/Documents/数据集/free_normal/clean_data"
 	global outdir "/Users/zhangyi/Documents/数据集/free_normal"
-	global date "1213" //每次检查时修改日期，生成新的结果
+	global date "1213" //每次检查时修改日期，生成新的结果、
+*王欢
+	cd "/Users/zhangyi/Documents/数据集/free_normal/raw_data"
+	global cleandir "/Users/zhangyi/Documents/数据集/free_normal/clean_data"
+	global outdir "/Users/zhangyi/Documents/数据集/free_normal"
+	global date "1213" //每次检查时修改日期，生成新的结果、
 
 *调用数据
 
