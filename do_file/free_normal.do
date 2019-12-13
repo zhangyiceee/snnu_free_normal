@@ -17,12 +17,12 @@
 	global cleandir "/Users/zhangyi/Documents/数据集/free_normal/clean_data"
 	global outdir "/Users/zhangyi/Documents/数据集/free_normal/outdir"
 	global date "1213" //每次检查时修改日期，生成新的结果、
-/*王欢
+////*王欢
 	cd "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\rawdata"
 	global cleandir "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\save"
 	global outdir "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\working"
 	global date "1213" //每次检查时修改日期，生成新的结果、
-*/
+*////
 *调用数据
 
 	use "2016ji_student_dataset.dta",clear
