@@ -6,6 +6,7 @@
 **Created	:  	 20191213 
 **Last Modified: 2019
 *============================================================*
+*============================================================*
 	capture	clear
 	capture log close
 	set	more off
@@ -884,7 +885,6 @@ egen mjingshenbing = rowmean(stu_b_16_7_3 stu_b_16_16_3 stu_b_16_35_3 stu_b_16_6
 
 
 save "$cleandir/free_normal_clean_$date.dta",replace 
-
 
 
 
