@@ -831,3 +831,11 @@
 	label var stu_selfmotiv "自我主导=1 非自我主导=0"
 	save "$cleandir/free_normal_clean_$date.dta",replace 
 
+
+
+
+
+
+
+
+
