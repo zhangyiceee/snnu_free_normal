@@ -829,57 +829,5 @@
 	gen  stu_selfmotiv=2-stu_b_16_52 //1=自我主导的报考生 0=非自我主导的报考生
 	bro  stu_selfmotiv stu_b_16_52 
 	label var stu_selfmotiv "自我主导=1 非自我主导=0"
-*在免费师范生中52题存在两个缺失值样本，删除
-	drop if stuid=="41608156"
-	drop if stuid=="4165044"
-	save "$cleandir/cleandta_free_normal_$date.dta",replace 
-/*================================================================*
-								跑表格
-*================================================================*/
-	use  "$cleandir/cleandta_free_normal_$date.dta",clear 
-	*被解释变量
-	
-	logout , save($outdir/Y描述性统计分析_$date) word replace : sum $yvar
-
-	*解释变量
-	logout , save($outdir/X描述性统计分析_$date) word replace : sum $xvar 
-
-	*Ttest 看教师职业认同感在师范生和非师范生之间的差异
-	gen normal_group = . //分组变量 
-	replace normal_group = 1 if stu_normal == 1 
-	replace normal_group = 0 if stu_normal == 2 |stu_normal == 3
-	iebaltab $yvar , grpvar(normal_group) save($outdir/师范与非师范分组t检验_$date.xls) replace rowvarlabel pttest
-	iebaltab $yvar , grpvar(stu_selfmotiv) save($outdir/自我与非自我分组t检验_$date.xls) replace rowvarlabel pttest
-
-
-	*回归表格
-	*全样本
-	foreach var of varlist $yvar   {
-	reg `var'  $xvar
-	outreg2 using "$outdir/全样本ols_$date.xls",append 
-}
-
-	*免费师范生
-	foreach var of varlist $yvar   {
-		reg `var'  $xvar if normal_group==1
-		outreg2 using "$outdir/免费师范生ols_$date.xls",append 
-}
-	*免费师范生 自我主导与非自我主导
-	foreach var of varlist $yvar   {
-		reg `var'  stu_selfmotiv $xvar if normal_group==1
-		outreg2 using "$outdir/自我非自我免费师范生ols_$date.xls",append 
-}
-
-	probit stu_selfmotiv self_perception intrinsic_career_value fallback_career stu_utility_value social_utility_value task_demand task_return $xvar
-	margins,dydx(*)
-	outreg2 using "$outdir/probit_$date.xls",replace
-	
-	alpha stu_b_16_1_2 - stu_b_16_52_2 //职业选择总分
-	alpha stu_b_16_1_2 stu_b_16_2_2 stu_b_16_3_2 //自我感知认识
-	alpha stu_b_16_4_2 stu_b_16_5_2 //内在职业价值
-	alpha stu_b_16_50_2 stu_b_16_51_2 stu_b_16_52_2 //再就业保障
-	alpha stu_b_16_6_2 stu_b_16_7_2 stu_b_16_8_2 stu_b_16_9_2 stu_b_16_10_2 stu_b_16_11_2 stu_b_16_47_2 stu_b_16_48_2 stu_b_16_49_2 //个人效用价值
-	alpha stu_b_16_12_2 stu_b_16_13_2 stu_b_16_14_2 stu_b_16_15_2 stu_b_16_16_2 stu_b_16_17_2 stu_b_16_18_2 stu_b_16_19_2 stu_b_16_20_2 stu_b_16_21_2 stu_b_16_22_2 stu_b_16_23_2 stu_b_16_24_2 stu_b_16_25_2 stu_b_16_26_2 stu_b_16_27_2 //社会效用价值
-	alpha stu_b_16_28_2 stu_b_16_29_2 stu_b_16_30_2 stu_b_16_31_2 stu_b_16_32_2 stu_b_16_33_2 //任务需求
-	alpha stu_b_16_34_2 stu_b_16_35_2 stu_b_16_36_2 stu_b_16_37_2 stu_b_16_38_2 stu_b_16_39_2 stu_b_16_40_2 stu_b_16_41_2 stu_b_16_42_2 stu_b_16_43_2 stu_b_16_44_2 stu_b_16_45_2 stu_b_16_46_2 //任务回报
+	save "$cleandir/free_normal_clean_$date.dta",replace 
 
