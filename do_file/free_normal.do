@@ -6,6 +6,7 @@
 **Created	:  	 20191213 
 **Last Modified: 2019
 *============================================================*
+*============================================================*
 	capture	clear
 	capture log close
 	set	more off
@@ -17,12 +18,6 @@
 	global cleandir "/Users/zhangyi/Documents/数据集/free_normal/clean_data"
 	global outdir "/Users/zhangyi/Documents/数据集/free_normal/outdir"
 	global date "1213" //每次检查时修改日期，生成新的结果、
-	*/
-*王欢
-	cd "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\rawdata"
-	global cleandir "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\save"
-	global outdir "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\working"
-	global date "1216" //每次检查时修改日期，生成新的结果、
 
 *调用数据
 /*
@@ -941,7 +936,6 @@
 	xi:reg sd_term_exam_totalscore stu_selfmotiv sd_gk_engscore $xvar prefer zhiyuan
 		est store n3
 	outreg2 [n1 n2 n3] using reg_eng.xls, excel replace bdec(2) sdec(2) 
-
 
 
 
