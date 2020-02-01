@@ -2,7 +2,7 @@
 **       		 免费师范生项目  
 **Goal		:    免费师范生的教师职业选择的影响因素
 **Data		:    2016ji_student_dataset.dta
-**Author	:  	 ZhangYi 
+**Author	:  	 Wanghuan ZhangYi 
 **Created	:  	 20191213 
 **Last Modified: 2019
 *============================================================*
@@ -16,7 +16,11 @@
 	cd "/Users/zhangyi/Documents/数据集/free_normal/raw_data"
 	global cleandir "/Users/zhangyi/Documents/数据集/free_normal/clean_data"
 	global outdir "/Users/zhangyi/Documents/数据集/free_normal/output"
+<<<<<<< Updated upstream
 	global date "0101" //每次检查时修改日期，生成新的结果、
+=======
+	global date "1213" //每次检查时修改日期，生成新的结果、
+>>>>>>> Stashed changes
 *王欢
 	cd "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\rawdata"
 	global cleandir "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\save"
@@ -886,8 +890,12 @@
 //精神病性
 	
 	save "$cleandir\free normal clean $date.dta",replace 
+<<<<<<< Updated upstream
 	save "$cleandir/free normal clean $date.dta",replace  //for Zhangyi MACOS
 
+=======
+	save "$cleandir/free normal clean $date.dta",replace 
+>>>>>>> Stashed changes
 */
 
 *==========*
