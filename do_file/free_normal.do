@@ -7,17 +7,16 @@
 **Last Modified: 2019
 *============================================================*
 *============================================================*
-	capture	clear
+	clear all
 	capture log close
 	set	more off
 	set scrollbufsize 2048000
-	capture log close 
 
 *张毅	
 	cd "/Users/zhangyi/Documents/数据集/free_normal/raw_data"
 	global cleandir "/Users/zhangyi/Documents/数据集/free_normal/clean_data"
-	global outdir "/Users/zhangyi/Documents/数据集/free_normal/outdir"
-	global date "1213" //每次检查时修改日期，生成新的结果、
+	global outdir "/Users/zhangyi/Documents/数据集/free_normal/output"
+	global date "0101" //每次检查时修改日期，生成新的结果、
 *王欢
 	cd "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\rawdata"
 	global cleandir "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\save"
@@ -887,6 +886,8 @@
 //精神病性
 	
 	save "$cleandir\free normal clean $date.dta",replace 
+	save "$cleandir/free normal clean $date.dta",replace  //for Zhangyi MACOS
+
 */
 
 *==========*
