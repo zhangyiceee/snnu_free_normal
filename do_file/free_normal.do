@@ -2,22 +2,22 @@
 **       		 免费师范生项目  
 **Goal		:    免费师范生的教师职业选择的影响因素
 **Data		:    2016ji_student_dataset.dta
-**Author	:  	 ZhangYi 
+**Author	:  	 Wanghuan ZhangYi 
 **Created	:  	 20191213 
 **Last Modified: 2019
 *============================================================*
 *============================================================*
-	capture	clear
+	clear all
 	capture log close
 	set	more off
 	set scrollbufsize 2048000
-	capture log close 
 
 *张毅	
 	cd "/Users/zhangyi/Documents/数据集/free_normal/raw_data"
 	global cleandir "/Users/zhangyi/Documents/数据集/free_normal/clean_data"
 	global outdir "/Users/zhangyi/Documents/数据集/free_normal/output"
 	global date "1213" //每次检查时修改日期，生成新的结果、
+
 *王欢
 	cd "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\rawdata"
 	global cleandir "C:\Users\wangh\Desktop\公费师范生报告\第六章抑郁数据处理\save"
@@ -827,37 +827,45 @@
 	egen sd_gk_engscore = std(gk_engscore)
 	
 ****教师职业选择总分
-	egen stu_profession_score = rowtotal(stu_b_16_1_2 - stu_b_16_52_2)
+	egen stu_profession_score = rowmean(stu_b_16_1_2 - stu_b_16_52_2)
 	label var stu_profession_score "教师职业选择总分"
 
 	*自我感知认识
-	egen self_perception = rowtotal(stu_b_16_1_2 stu_b_16_2_2 stu_b_16_3_2) 
+	egen self_perception = rowmean(stu_b_16_1_2 stu_b_16_2_2 stu_b_16_3_2) 
 	label var  self_perception "自我感知认识"
 
 	*内在职业价值
-	egen intrinsic_career_value = rowtotal(stu_b_16_4_2 stu_b_16_5_2)
+	egen intrinsic_career_value = rowmean(stu_b_16_4_2 stu_b_16_5_2)
 	label var intrinsic_career_value "内在职业价值"
 
 	*再就业保障
-	egen fallback_career = rowtotal(stu_b_16_50_2 stu_b_16_51_2 stu_b_16_52_2)
+	egen fallback_career = rowmean(stu_b_16_50_2 stu_b_16_51_2 stu_b_16_52_2)
 	label var fallback_career "再就业保障"
 
 	*个人效用价值
-	egen stu_utility_value = rowtotal(stu_b_16_6_2 stu_b_16_7_2 stu_b_16_8_2 stu_b_16_9_2 stu_b_16_10_2 stu_b_16_11_2 stu_b_16_47_2 stu_b_16_48_2 stu_b_16_49_2)
+	egen stu_utility_value = rowmean(stu_b_16_6_2 stu_b_16_7_2 stu_b_16_8_2 stu_b_16_9_2 stu_b_16_10_2 stu_b_16_11_2 stu_b_16_47_2 stu_b_16_48_2 stu_b_16_49_2)
 	label  var stu_utility_value "个人效用价值" 
 
 	*社会效用价值
-	egen social_utility_value = rowtotal(stu_b_16_12_2 stu_b_16_13_2 stu_b_16_14_2 stu_b_16_15_2 stu_b_16_16_2 stu_b_16_17_2 stu_b_16_18_2 stu_b_16_19_2 stu_b_16_20_2 stu_b_16_21_2 stu_b_16_22_2 stu_b_16_23_2 stu_b_16_24_2 stu_b_16_25_2 stu_b_16_26_2 stu_b_16_27_2)
+	egen social_utility_value = rowmean(stu_b_16_12_2 stu_b_16_13_2 stu_b_16_14_2 stu_b_16_15_2 stu_b_16_16_2 stu_b_16_17_2 stu_b_16_18_2 stu_b_16_19_2 stu_b_16_20_2 stu_b_16_21_2 stu_b_16_22_2 stu_b_16_23_2 stu_b_16_24_2 stu_b_16_25_2 stu_b_16_26_2 stu_b_16_27_2)
 	label var social_utility_value "社会效用价值"
+	tab1 stu_b_16_12_2 stu_b_16_13_2 stu_b_16_14_2 stu_b_16_15_2 stu_b_16_16_2 stu_b_16_17_2 stu_b_16_18_2 stu_b_16_19_2 stu_b_16_20_2 stu_b_16_21_2 stu_b_16_22_2 stu_b_16_23_2 stu_b_16_24_2 stu_b_16_25_2 stu_b_16_26_2 stu_b_16_27_2,m
+	drop if  stu_b_16_27_2 ==27
+	drop if stu_b_16_22_2  ==8
 
 	*任务需求
-	egen task_demand = rowtotal(stu_b_16_28_2 stu_b_16_29_2 stu_b_16_30_2 stu_b_16_31_2 stu_b_16_32_2 stu_b_16_33_2)
+	egen task_demand = rowmean(stu_b_16_28_2 stu_b_16_29_2 stu_b_16_30_2 stu_b_16_31_2 stu_b_16_32_2 stu_b_16_33_2)
 	label var task_demand "任务需求"
 
 	*任务回报
-	egen task_return = rowtotal(stu_b_16_34_2 stu_b_16_35_2 stu_b_16_36_2 stu_b_16_37_2 stu_b_16_38_2 stu_b_16_39_2 stu_b_16_40_2 stu_b_16_41_2 stu_b_16_42_2 stu_b_16_43_2 stu_b_16_44_2 stu_b_16_45_2 stu_b_16_46_2)
+	egen task_return = rowmean(stu_b_16_34_2 stu_b_16_35_2 stu_b_16_36_2 stu_b_16_37_2 stu_b_16_38_2 stu_b_16_39_2 stu_b_16_40_2 stu_b_16_41_2 stu_b_16_42_2 stu_b_16_43_2 stu_b_16_44_2 stu_b_16_45_2 stu_b_16_46_2)
 	label var task_return "任务回报"
 	
+*检查是否存在异常值,此部分的描述性分析，最大最小值都应该介于1-7之间 
+	sum stu_profession_score self_perception intrinsic_career_value fallback_career stu_utility_value social_utility_value task_demand task_return
+
+
+
 ****SCL-90得分  m>2为检出心理状况
 	egen mdepression = rowmean(stu_b_16_5_3 stu_b_16_14_3 stu_b_16_15_3 stu_b_16_20_3 stu_b_16_22_3 stu_b_16_26_3 stu_b_16_29_3 stu_b_16_30_3 stu_b_16_31_3 stu_b_16_32_3 stu_b_16_54_3 stu_b_16_71_3 stu_b_16_79_3)
 //抑郁
@@ -887,7 +895,8 @@
 //精神病性
 	
 	save "$cleandir\free normal clean $date.dta",replace 
-    save "$cleandir/free normal clean $date.dta",replace 
+	save "$cleandir/free normal clean $date.dta",replace  //for Zhangyi MACOS
+
 */
 
 *==========*
